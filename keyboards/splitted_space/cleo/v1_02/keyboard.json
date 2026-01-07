@@ -6,10 +6,10 @@
     "features": {
         "bootmagic": false,
         "command": false,
-        "console": true,
+        "console": false,
         "extrakey": true,
         "mousekey": true,
-        "nkro": true,
+        "nkro": false,
         "encoder": false
     },
     "processor": "STM32F072",
