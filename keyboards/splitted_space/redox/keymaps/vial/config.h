@@ -17,6 +17,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#define VIAL_KEYBOARD_UID { 0x52,0x45,0x44,0x4F,0x58,0x56,0x49,0x41 }
+
 /* Use I2C or Serial, not both */
 #define USE_SERIAL
 // #define USE_I2C
@@ -34,7 +36,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define RGBLIGHT_VAL_STEP 8
 
 /* unique Vial keyboard ID and secure unlock combination Tab + Escape */
-#define VIAL_KEYBOARD_UID {0x01, 0x8F, 0xC6, 0xFF, 0xB4, 0x6A, 0x24, 0xF7}
 #define VIAL_UNLOCK_COMBO_ROWS {1, 2}
 #define VIAL_UNLOCK_COMBO_COLS {0, 0}
 

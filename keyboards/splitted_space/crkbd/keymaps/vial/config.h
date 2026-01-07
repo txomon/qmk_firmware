@@ -1,4 +1,5 @@
 /*
+#define VIAL_KEYBOARD_UID { 0x43,0x52,0x4B,0x42,0x56,0x49,0x41,0x4C }
 Copyright 2019 @foostan
 Copyright 2020 Drashna Jaelre <@drashna>
 
@@ -18,7 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#define VIAL_KEYBOARD_UID {0x3B, 0x6B, 0xA0, 0x29, 0x80, 0x56, 0xED, 0xD1}
 #define VIAL_UNLOCK_COMBO_ROWS {0, 0}
 #define VIAL_UNLOCK_COMBO_COLS {0, 1}
 

@@ -24,9 +24,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //┌────────┬────────┬────────┬────────┬────────┬────────┐                                           ┌────────┬────────┬────────┬────────┬────────┬────────┐
      KC_F12  ,KC_F1   ,KC_F2   ,KC_F3   ,KC_F4   ,KC_F5   ,                                            KC_F6   ,KC_F7   ,KC_F8   ,KC_F9   ,KC_F10  ,KC_F11,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┐                         ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     DE_CIRC ,DE_QUOT ,DE_DQUO ,DE_LCBR ,DE_RCBR ,DE_GRV  ,RGB_MOD ,                          QK_BOOT,DE_PERC ,DE_PLUS ,DE_MINS ,DE_ASTR  ,DE_SLSH ,DE_BSLS ,
+     DE_CIRC ,DE_QUOT ,DE_DQUO ,DE_LCBR ,DE_RCBR ,DE_GRV  ,RM_NEXT ,                          QK_BOOT,DE_PERC ,DE_PLUS ,DE_MINS ,DE_ASTR  ,DE_SLSH ,DE_BSLS ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┤                         ├────────┼────────┼────────┼────────┼────────┼────────┼────────┤
-     DE_TILD ,DE_EXLM ,DE_DLR  ,DE_LPRN ,DE_RPRN ,DE_AMPR ,RGB_TOG ,                          _______ ,KC_LEFT ,KC_DOWN ,KC_UP   ,KC_RGHT ,DE_QUES ,DE_PIPE ,
+     DE_TILD ,DE_EXLM ,DE_DLR  ,DE_LPRN ,DE_RPRN ,DE_AMPR ,RM_TOGG ,                          _______ ,KC_LEFT ,KC_DOWN ,KC_UP   ,KC_RGHT ,DE_QUES ,DE_PIPE ,
   //├────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┐       ┌────────┼────────┼────────┼────────┼────────┼────────┼────────┼────────┤
      _______ ,DE_AT   ,DE_EURO ,DE_LBRC ,DE_RBRC ,_______ ,RGB_M_P ,_______ ,        _______ ,_______ ,DE_HASH ,DE_LABK ,DE_SCLN ,DE_COLN ,DE_RABK ,DE_SECT ,
   //├────────┼────────┼────────┼────────┼────┬───┴────┬───┼────────┼────────┤       ├────────┼────────┼───┬────┴───┬────┼────────┼────────┼────────┼────────┤

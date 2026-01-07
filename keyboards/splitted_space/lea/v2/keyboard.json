@@ -49,7 +49,7 @@
     "split": {
         "enabled": true,
         "transport": {
-            "protocol": "serial_usart"
+            "protocol": "serial"
         },
         "encoder": {
             "right": {

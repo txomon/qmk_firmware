@@ -1,4 +1,5 @@
 #pragma once
+#define VIAL_KEYBOARD_UID { 0x43,0x4C,0x45,0x4F,0x33,0x30,0x32,0x04 }
 
 #define SPLIT_HAND_PIN B5
 #undef SPLIT_USB_DETECT
@@ -9,8 +10,6 @@
 #define SERIAL_USART_DRIVER SD1
 #define SERIAL_USART_TX_PAL_MODE 1
 #define SERIAL_USART_RX_PAL_MODE 1
-
-#define VIAL_KEYBOARD_UID { 0x05, 0xCD, 0x9F, 0x8A, 0xF4, 0xDF, 0xDE, 0xC4 }
 
 #define NO_ACTION_ONESHOT
 #define NO_RESET

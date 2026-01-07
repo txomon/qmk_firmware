@@ -36,10 +36,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                           KC_LCTL, KC_LGUI, KC_LALT,   MO(1), KC_SPC,           KC_ENT,    MO(2), 	MO(3), KC_HOME,  KC_END
     ),
     [3] = LAYOUT_split_5x6(
-      _______, _______ ,  _______ ,  _______ , _______ , _______,                           _______,  _______  , _______,  _______ ,  RGB_HUD ,RGB_HUI,
-      _______, _______ ,  _______ ,  _______ , _______ , _______,                           _______,  _______  , _______,  _______ ,  RGB_RMOD ,RGB_MOD,
-      _______, _______ ,  _______ ,  _______ , _______ , _______,                           _______,  _______  , _______,  _______ ,  RGB_VAD ,RGB_VAI,
-      _______, _______ ,  _______ ,  _______ , _______ , _______, KC_MPLY,    RGB_TOG,      _______,  _______  , _______,  _______ ,  RGB_SPD ,RGB_SPI,
+      _______, _______ ,  _______ ,  _______ , _______ , _______,                           _______,  _______  , _______,  _______ ,  RM_HUED ,RM_HUEU,
+      _______, _______ ,  _______ ,  _______ , _______ , _______,                           _______,  _______  , _______,  _______ ,  RM_PREV ,RM_NEXT,
+      _______, _______ ,  _______ ,  _______ , _______ , _______,                           _______,  _______  , _______,  _______ ,  RM_VALD ,RM_VALU,
+      _______, _______ ,  _______ ,  _______ , _______ , _______, KC_MPLY,    RM_TOGG,      _______,  _______  , _______,  _______ ,  RM_SPDD ,RM_SPDU,
                     KC_LCTL, KC_LGUI, KC_LALT,   MO(1), KC_SPC,  KC_ENT,  MO(2), 	  MO(3), KC_HOME,  KC_END
     ),
 };
@@ -47,9 +47,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 #ifdef ENCODER_MAP_ENABLE
 	const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][2] = {
 		[0] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(KC_PGDN, KC_PGUP) },
-    [1] = { ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(KC_WH_D, KC_WH_U) },
-    [2] = { ENCODER_CCW_CW(KC_MS_L, KC_MS_R), ENCODER_CCW_CW(KC_MS_D, KC_MS_U) },
-    [3] = { ENCODER_CCW_CW(RGB_VAD, RGB_VAI), ENCODER_CCW_CW(RGB_RMOD, RGB_MOD) },
+    [1] = { ENCODER_CCW_CW(KC_MPRV, KC_MNXT), ENCODER_CCW_CW(MS_WHLD, MS_WHLU) },
+    [2] = { ENCODER_CCW_CW(MS_LEFT, MS_RGHT), ENCODER_CCW_CW(MS_DOWN, MS_UP) },
+    [3] = { ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(RM_PREV, RM_NEXT) },
 	};
 #endif
 
