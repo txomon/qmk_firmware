@@ -1,4 +1,5 @@
 #pragma once
+#define VIAL_KEYBOARD_UID { 0x4C,0x45,0x41,0x5F,0x56,0x31,0x00,0x01 }
 
 #define SERIAL_USART_DRIVER SD1
 #define SERIAL_USART_TX_PIN A9
