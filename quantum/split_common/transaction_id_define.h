@@ -99,6 +99,11 @@ enum serial_transaction_id {
     PUT_ACTIVITY,
 #endif // SPLIT_ACTIVITY_ENABLE
 
+#if defined(RULE_LIGHTING_ENABLE) && defined(SPLIT_KEYBOARD)
+    SPLIT_RULE_LIGHTING_SYNC_ID,
+    SPLIT_KEYMAP_SYNC_ID,
+#endif // defined(RULE_LIGHTING_ENABLE) && defined(SPLIT_KEYBOARD)
+
 #if defined(SPLIT_TRANSACTION_IDS_KB) || defined(SPLIT_TRANSACTION_IDS_USER)
     PUT_RPC_INFO,
     PUT_RPC_REQ_DATA,
