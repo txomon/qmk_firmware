@@ -90,13 +90,13 @@ static void rule_lighting_calc_color(const rule_lighting_entry_t *rule,
 
     uint8_t brightness = rgb_matrix_get_val();
 
-    uint8_t h_idle = RGB_HUE_6TO8(rule->h_idle);
-    uint8_t h_pressed = RGB_HUE_6TO8(rule->h_pressed);
-    uint8_t s_idle = rgb_sat_to_value(rule->sat_idle);
-    uint8_t s_pressed = rgb_sat_to_value(rule->sat_pressed);
+    uint8_t h_idle = VIAL_RGB_HUE_6TO8(rule->h_idle);
+    uint8_t h_pressed = VIAL_RGB_HUE_6TO8(rule->h_pressed);
+    uint8_t s_idle = vial_rgb_sat_to_value(rule->sat_idle);
+    uint8_t s_pressed = vial_rgb_sat_to_value(rule->sat_pressed);
 
-    bool pressed_off = !RGB_SAT_IS_ON(rule->sat_pressed);
-    bool idle_off = !RGB_SAT_IS_ON(rule->sat_idle);
+    bool pressed_off = !VIAL_RGB_SAT_IS_ON(rule->sat_pressed);
+    bool idle_off = !VIAL_RGB_SAT_IS_ON(rule->sat_idle);
 
     if (blend < 255) {
         if (pressed_off) {

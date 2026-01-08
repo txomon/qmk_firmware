@@ -16,7 +16,7 @@
 
 #include "rule_lighting.h"
 #include "keymap_introspection.h"
-#include "eeprom.h"
+#include "dynamic_keymap.h"
 #include <stddef.h>
 #include <string.h>
 
@@ -28,18 +28,11 @@
 
 #ifdef RGB_MATRIX_ENABLE
 
-/* EEPROM layout for rule lighting
- * Stored at end of user EEPROM space
- * Config: 1 byte
- * Entries: RULE_LIGHTING_ENTRIES * 8 bytes
- * Total: 1 + (RULE_LIGHTING_ENTRIES * 8) bytes
- */
-#ifndef EECONFIG_RULE_LIGHTING
-    #define EECONFIG_RULE_LIGHTING (EECONFIG_SIZE - 1 - (RULE_LIGHTING_ENTRIES * 8))
-#endif
-
-#define RULE_LIGHTING_CONFIG_ADDR    EECONFIG_RULE_LIGHTING
-#define RULE_LIGHTING_ENTRIES_ADDR  (EECONFIG_RULE_LIGHTING + 1)
+/* Forward declarations for EEPROM access */
+extern int nvm_dynamic_keymap_get_rgb_indicator_config(rule_lighting_config_t *config);
+extern int nvm_dynamic_keymap_set_rgb_indicator_config(const rule_lighting_config_t *config);
+extern int nvm_dynamic_keymap_get_rgb_indicator_entry(uint8_t index, rule_lighting_entry_t *entry);
+extern int nvm_dynamic_keymap_set_rgb_indicator_entry(uint8_t index, const rule_lighting_entry_t *entry);
 
 /* RAM cache of config and entries */
 static rule_lighting_config_t indicator_config;
@@ -60,9 +53,9 @@ static void rule_lighting_clear_ram(void) {
             .mods = 0,
             .keycode_start = 0,
             .keycode_end = 0,
-            .sat_idle = RGB_SAT_OFF,
+            .sat_idle = VIAL_RGB_SAT_OFF,
             .h_idle = 0,
-            .sat_pressed = RGB_SAT_OFF,
+            .sat_pressed = VIAL_RGB_SAT_OFF,
             .h_pressed = 0,
         };
     }
@@ -76,10 +69,9 @@ void rule_lighting_reset(void) {
     rule_lighting_clear_ram();
 
     /* Save blank state to EEPROM */
-    eeprom_update_block(&indicator_config, (void*)RULE_LIGHTING_CONFIG_ADDR, sizeof(rule_lighting_config_t));
+    nvm_dynamic_keymap_set_rgb_indicator_config(&indicator_config);
     for (uint8_t i = 0; i < RULE_LIGHTING_ENTRIES; i++) {
-        uint32_t addr = RULE_LIGHTING_ENTRIES_ADDR + (i * sizeof(rule_lighting_entry_t));
-        eeprom_update_block(&indicator_entries[i], (void*)addr, sizeof(rule_lighting_entry_t));
+        nvm_dynamic_keymap_set_rgb_indicator_entry(i, &indicator_entries[i]);
     }
 }
 
@@ -96,7 +88,7 @@ void rule_lighting_load(void) {
     }
 #endif
 
-    eeprom_read_block(&indicator_config, (void*)RULE_LIGHTING_CONFIG_ADDR, sizeof(rule_lighting_config_t));
+    nvm_dynamic_keymap_get_rgb_indicator_config(&indicator_config);
 
     /* Sanity check entry_count */
     if (indicator_config.entry_count > RULE_LIGHTING_ENTRIES) {
@@ -105,8 +97,7 @@ void rule_lighting_load(void) {
 
     /* Load all entries */
     for (uint8_t i = 0; i < RULE_LIGHTING_ENTRIES; i++) {
-        uint32_t addr = RULE_LIGHTING_ENTRIES_ADDR + (i * sizeof(rule_lighting_entry_t));
-        eeprom_read_block(&indicator_entries[i], (void*)addr, sizeof(rule_lighting_entry_t));
+        nvm_dynamic_keymap_get_rgb_indicator_entry(i, &indicator_entries[i]);
     }
 }
 
@@ -150,11 +141,10 @@ void rule_lighting_set_config(const rule_lighting_config_t *config) {
  * Save all rule lighting data to EEPROM
  */
 void rule_lighting_save(void) {
-    eeprom_update_block(&indicator_config, (void*)RULE_LIGHTING_CONFIG_ADDR, sizeof(rule_lighting_config_t));
+    nvm_dynamic_keymap_set_rgb_indicator_config(&indicator_config);
 
     for (uint8_t i = 0; i < RULE_LIGHTING_ENTRIES; i++) {
-        uint32_t addr = RULE_LIGHTING_ENTRIES_ADDR + (i * sizeof(rule_lighting_entry_t));
-        eeprom_update_block(&indicator_entries[i], (void*)addr, sizeof(rule_lighting_entry_t));
+        nvm_dynamic_keymap_set_rgb_indicator_entry(i, &indicator_entries[i]);
     }
 }
 
@@ -196,13 +186,10 @@ typedef struct {
 } __attribute__((packed)) keymap_layer_sync_t;
 
 /* Synced keymap storage on slave (RAM) */
-static uint16_t synced_keymap[LAYER_MAX_LAYERS][MATRIX_ROWS][MATRIX_COLS];
+static uint16_t synced_keymap[DYNAMIC_KEYMAP_LAYER_COUNT][MATRIX_ROWS][MATRIX_COLS];
 static uint8_t synced_counter = 0xFF;       /* Counter for completed sync */
 static uint8_t pending_counter = 0xFF;      /* Counter currently being synced */
 static uint8_t pending_mask = 0;            /* Layers received for pending_counter */
-
-/* Change counter for keymap updates */
-static uint8_t master_keymap_counter = 0;
 
 /**
  * Slave callback for rule lighting sync
@@ -227,7 +214,7 @@ static void keymap_slave_handler(uint8_t m2s_size, const void *m2s_buffer, uint8
     if (m2s_size == sizeof(keymap_layer_sync_t)) {
         const keymap_layer_sync_t *data = (const keymap_layer_sync_t *)m2s_buffer;
 
-        if (data->layer >= LAYER_MAX_LAYERS) return;
+        if (data->layer >= DYNAMIC_KEYMAP_LAYER_COUNT) return;
 
         /* New counter? Reset pending state */
         if (data->counter != pending_counter) {
@@ -240,7 +227,7 @@ static void keymap_slave_handler(uint8_t m2s_size, const void *m2s_buffer, uint8
         pending_mask |= (1 << data->layer);
 
         /* All layers received? Commit the sync */
-        uint8_t all_layers = (1 << LAYER_MAX_LAYERS) - 1;
+        uint8_t all_layers = (1 << DYNAMIC_KEYMAP_LAYER_COUNT) - 1;
         if (pending_mask == all_layers) {
             synced_counter = pending_counter;
         }
@@ -257,7 +244,7 @@ static uint16_t resolve_keycode(uint8_t layer, uint8_t row, uint8_t col, bool us
 
     for (int8_t l = layer; l >= 0; l--) {
         uint16_t kc = use_synced ? synced_keymap[l][row][col]
-                                 : keycode_at_keymap_location_raw(l, row, col);
+                                 : dynamic_keymap_get_keycode(l, row, col);
         if (kc != KC_TRNS) {
             return kc;
         }
@@ -267,7 +254,7 @@ static uint16_t resolve_keycode(uint8_t layer, uint8_t row, uint8_t col, bool us
 
 /**
  * Get keycode with split keyboard awareness
- * Master uses keymap_introspection, slave uses synced_keymap
+ * Master uses dynamic_keymap, slave uses synced_keymap
  */
 uint16_t get_synced_keycode(uint8_t layer, uint8_t row, uint8_t col) {
     if (row >= MATRIX_ROWS || col >= MATRIX_COLS) {
@@ -303,16 +290,11 @@ static void rule_lighting_master_sync(void) {
             /* Idle mode: query slave's counter and send rule lighting */
             uint8_t slave_counter = 0xFF;
             bool ok = transaction_rpc_exec(SPLIT_KEYMAP_SYNC_ID, 0, NULL, 1, &slave_counter);
+            uint8_t master_counter = dynamic_keymap_get_change_counter();
 
-            /* Check if keymap changed (compare with saved counter) */
-            static uint8_t last_master_counter = 0;
-            if (master_keymap_counter != last_master_counter) {
-                last_master_counter = master_keymap_counter;
+            if (ok && slave_counter != master_counter) {
                 sync_layer = 0;
-                sync_counter = master_keymap_counter;
-            } else if (ok && slave_counter != master_keymap_counter) {
-                sync_layer = 0;
-                sync_counter = master_keymap_counter;
+                sync_counter = master_counter;
             }
 
             /* Always sync rule lighting */
@@ -325,13 +307,13 @@ static void rule_lighting_master_sync(void) {
             layer_data.layer = sync_layer;
             for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
                 for (uint8_t col = 0; col < MATRIX_COLS; col++) {
-                    layer_data.keycodes[row][col] = keycode_at_keymap_location_raw(sync_layer, row, col);
+                    layer_data.keycodes[row][col] = dynamic_keymap_get_keycode(sync_layer, row, col);
                 }
             }
             transaction_rpc_send(SPLIT_KEYMAP_SYNC_ID, sizeof(keymap_layer_sync_t), &layer_data);
 
             sync_layer++;
-            if (sync_layer >= LAYER_MAX_LAYERS) {
+            if (sync_layer >= DYNAMIC_KEYMAP_LAYER_COUNT) {
                 sync_layer = 0xFF;  /* Done, back to idle */
             }
         }
@@ -341,7 +323,7 @@ static void rule_lighting_master_sync(void) {
 #else /* !SPLIT_KEYBOARD */
 
 /**
- * Non-split keyboard: just use keymap introspection directly
+ * Non-split keyboard: just use dynamic_keymap directly
  */
 uint16_t get_synced_keycode(uint8_t layer, uint8_t row, uint8_t col) {
     return keycode_at_keymap_location_raw(layer, row, col);

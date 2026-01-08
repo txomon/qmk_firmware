@@ -21,8 +21,8 @@
 
 #ifdef RGB_MATRIX_ENABLE
 
-/* Default number of rule lighting entries based on EEPROM size
- * Matches entry count pattern from other QMK features
+/* Default number of RGB indicator entries based on EEPROM size
+ * Matches entry count pattern from other Vial features (tap dance, combos, etc.)
  * Each entry is 8 bytes, config is 1 byte */
 #ifndef RULE_LIGHTING_ENTRIES
     #if TOTAL_EEPROM_BYTE_COUNT > 4000
@@ -77,16 +77,16 @@
  * Saturation modes (2 bits)
  */
 typedef enum {
-    RGB_SAT_OFF    = 0b00,  // LED off (RGB 0,0,0)
-    RGB_SAT_WHITE  = 0b01,  // S=0 (white/grayscale)
-    RGB_SAT_PASTEL = 0b10,  // S=128 (soft color)
-    RGB_SAT_PURE   = 0b11,  // S=255 (vivid color)
-} rgb_saturation_t;
+    VIAL_RGB_SAT_OFF    = 0b00,  // LED off (RGB 0,0,0)
+    VIAL_RGB_SAT_WHITE  = 0b01,  // S=0 (white/grayscale)
+    VIAL_RGB_SAT_PASTEL = 0b10,  // S=128 (soft color)
+    VIAL_RGB_SAT_PURE   = 0b11,  // S=255 (vivid color)
+} vial_rgb_saturation_t;
 
-#define RGB_SAT_IS_ON(sat) ((sat) != RGB_SAT_OFF)
+#define VIAL_RGB_SAT_IS_ON(sat) ((sat) != VIAL_RGB_SAT_OFF)
 
 /**
- * RGB Rule Lighting Entry (8 bytes)
+ * RGB Indicator Rule Entry (8 bytes)
  *
  * Bit layout:
  *   Byte 0-1 (condition):
@@ -131,7 +131,7 @@ _Static_assert(sizeof(rule_lighting_entry_t) == 8,
     "Unexpected size of rule_lighting_entry_t structure");
 
 /**
- * Global Rule Lighting Config (1 byte)
+ * Global RGB Indicator Config (1 byte)
  * Note: Speed/brightness use rgb_matrix_get_speed()/get_val() from RGB Matrix
  * Effect is enabled/disabled by selecting it from the RGB Matrix effect list
  */
@@ -143,7 +143,7 @@ _Static_assert(sizeof(rule_lighting_config_t) == 1,
     "Unexpected size of rule_lighting_config_t structure");
 
 /**
- * Initialize the rule lighting system (early init)
+ * Initialize the RGB indicator system (early init)
  * Called from rgb_matrix_init() during keyboard_init()
  */
 void rule_lighting_init(void);
@@ -223,18 +223,18 @@ uint16_t get_synced_keycode(uint8_t layer, uint8_t row, uint8_t col);
 /**
  * Convert 6-bit hue to 8-bit
  */
-#define RGB_HUE_6TO8(h6) ((h6) << 2)
+#define VIAL_RGB_HUE_6TO8(h6) ((h6) << 2)
 
 /**
  * Convert saturation mode to S value (0-255)
  */
-static inline uint8_t rgb_sat_to_value(uint8_t sat_mode) {
+static inline uint8_t vial_rgb_sat_to_value(uint8_t sat_mode) {
     switch (sat_mode) {
-        case RGB_SAT_OFF:    return 0;
-        case RGB_SAT_WHITE:  return 0;
-        case RGB_SAT_PASTEL: return 128;
-        case RGB_SAT_PURE:   return 255;
-        default:             return 0;
+        case VIAL_RGB_SAT_OFF:    return 0;
+        case VIAL_RGB_SAT_WHITE:  return 0;
+        case VIAL_RGB_SAT_PASTEL: return 128;
+        case VIAL_RGB_SAT_PURE:   return 255;
+        default:                   return 0;
     }
 }
 
