@@ -1,6 +1,18 @@
 #pragma once
 #define VIAL_KEYBOARD_UID { 0x4C,0x43,0x48,0x4F,0x43,0x56,0x31,0x01 }
 
+// Rule lighting - must be before any includes
+#define RULE_LIGHTING_ENABLE
+#define RULE_LIGHTING_ENTRIES 4
+#define SPLIT_LAYER_STATE_ENABLE
+#define SPLIT_LED_STATE_ENABLE
+#define SPLIT_MODS_ENABLE
+
+// Reduce VIAL buffer sizes to save RAM
+#define VIAL_TAP_DANCE_ENTRIES 8
+#define VIAL_COMBO_ENTRIES 8
+#define VIAL_KEY_OVERRIDE_ENTRIES 8
+
 #define SPLIT_HAND_PIN B5
 
 #define SERIAL_USART_FULL_DUPLEX
@@ -36,7 +48,7 @@
 #define WS2812_DMA_CHANNEL 2
 
 #ifdef COMBO_ENABLE
-    #define VIAL_COMBO_ENTRIES 10
+
 	#define COMBO_TERM 400
 #endif
 
