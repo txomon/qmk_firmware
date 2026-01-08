@@ -23,6 +23,10 @@ ifeq ($(strip $(VIALRGB_ENABLE)), yes)
     OPT_DEFS += -DVIALRGB_ENABLE
 endif
 
+ifeq ($(strip $(RULE_LIGHTING_ENABLE)), yes)
+    SRC += $(QUANTUM_DIR)/rule_lighting.c
+endif
+
 ifeq ($(strip $(QMK_SETTINGS)), yes)
     AUTO_SHIFT_ENABLE := yes
     SRC += $(QUANTUM_DIR)/qmk_settings.c

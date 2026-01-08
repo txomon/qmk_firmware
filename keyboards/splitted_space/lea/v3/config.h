@@ -1,6 +1,17 @@
 #pragma once
+#define VIAL_KEYBOARD_UID { 0x4C,0x45,0x41,0x5F,0x56,0x33,0x00,0x03 }
+
+// Rule lighting - must be before any includes
+#define RULE_LIGHTING_ENABLE
+#define RULE_LIGHTING_ENTRIES 4
+#define SPLIT_LAYER_STATE_ENABLE
+#define SPLIT_LED_STATE_ENABLE
+#define SPLIT_MODS_ENABLE
 
 // Reduce VIAL buffer sizes to save RAM
+#define VIAL_TAP_DANCE_ENTRIES 8
+#define VIAL_COMBO_ENTRIES 8
+#define VIAL_KEY_OVERRIDE_ENTRIES 8
 
 #define SPLIT_HAND_PIN B5
 
