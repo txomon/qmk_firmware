@@ -1,9 +1,7 @@
-
 #pragma once
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 10
 
-#define VIAL_KEYBOARD_UID { 0x05, 0xCD, 0x9F, 0x8A, 0xF4, 0xDF, 0xDE, 0xC3 }
 
 #define NO_ACTION_ONESHOT
 #define NO_RESET
@@ -29,7 +27,7 @@
 // #define WS2812_SPI_USE_CIRCULAR_BUFFER
 
 #ifdef COMBO_ENABLE
-    #define VIAL_COMBO_ENTRIES 10
+
 	#define COMBO_TERM 400
 #endif
 
@@ -91,8 +89,6 @@
     #define LOCKING_SUPPORT_ENABLE
     #define LOCKING_RESYNC_ENABLE
 
-    #define SPLIT_LAYER_STATE_ENABLE
-    #define SPLIT_LED_STATE_ENABLE
 
     #define RGB_TRIGGER_ON_KEYDOWN
     #define SPLIT_TRANSPORT_MIRROR

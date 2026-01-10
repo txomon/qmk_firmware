@@ -11,7 +11,6 @@
 
 #define DYNAMIC_KEYMAP_LAYER_COUNT 4
 
-#define VIAL_KEYBOARD_UID { 0x05, 0xCD, 0x9F, 0x8A, 0xF4, 0xDF, 0xDE, 0xC3 }
 
 #define NO_ACTION_ONESHOT
 #define NO_RESET
@@ -36,7 +35,7 @@
 #define WS2812_DMA_CHANNEL 2
 
 #ifdef COMBO_ENABLE
-    #define VIAL_COMBO_ENTRIES 10
+
 	#define COMBO_TERM 400
 #endif
 

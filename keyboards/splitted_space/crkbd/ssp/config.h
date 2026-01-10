@@ -1,9 +1,8 @@
 #pragma once
 
-#define VIAL_KEYBOARD_UID {0x3B, 0x6B, 0xA0, 0x29, 0x80, 0x56, 0xED, 0xD1}
 
 #ifdef OLED_ENABLE
-        #define OLED_FONT_H "keyboards/_lib/glcdfont.c"
+        #define OLED_FONT_H "keyboards/splitted_space/_lib/glcdfont.c"
 	#define OLED_TIMEOUT 80000
 	#define OLED_BRIGHTNESS 90
 	#define SPLIT_WPM_ENABLE
